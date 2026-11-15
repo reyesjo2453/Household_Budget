@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Budget Tracker</title>
+<meta name="theme-color" content="#2e8b57">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Budget">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="month-nav">
+      <button class="icon-btn" id="prevMonth" aria-label="Previous month">‹</button>
+      <h1 id="monthLabel">Month</h1>
+      <button class="icon-btn" id="nextMonth" aria-label="Next month">›</button>
+    </div>
+    <div class="top-actions">
+      <button class="sync-pill" id="syncPill" aria-label="Sync status"><span class="dot"></span><span id="syncText">Local</span></button>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="pane pane-left" aria-label="Budgets">
+      <div id="cards" class="cards"></div>
+      <div class="total-card" id="totalCard"></div>
+    </section>
+
+    <section class="pane pane-right">
+      <form id="logForm" class="card form" autocomplete="off">
+        <h2>Quick log</h2>
+        <div class="cat-buttons" id="catButtons" role="radiogroup" aria-label="Category"></div>
+        <label class="amount-wrap">
+          <span class="cur">$</span>
+          <input id="amount" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" aria-label="Amount" required>
+        </label>
+        <div class="row">
+          <input id="store" type="text" placeholder="Store / note (optional)" aria-label="Store or note" maxlength="80">
+          <input id="date" type="date" aria-label="Date" required>
+        </div>
+        <button type="submit" class="primary" id="saveBtn">Save expense</button>
+      </form>
+
+      <div class="card entries">
+        <h2>Entries <span class="muted" id="entryCount"></span></h2>
+        <ul id="entryList" class="entry-list"></ul>
+        <p id="emptyMsg" class="muted empty" hidden>No entries this month yet.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="editDialog">
+  <form method="dialog" id="editForm" class="dlg">
+    <h2>Edit entry</h2>
+    <select id="editCat" aria-label="Category"></select>
+    <label class="amount-wrap small"><span class="cur">$</span><input id="editAmount" type="text" inputmode="decimal" required></label>
+    <input id="editStore" type="text" placeholder="Store" maxlength="80">
+    <input id="editNote" type="text" placeholder="Note" maxlength="120">
+    <input id="editDate" type="date" required>
+    <div class="dlg-actions">
+      <button type="button" class="danger" id="editDelete">Delete</button>
+      <span class="spacer"></span>
+      <button type="button" id="editCancel">Cancel</button>
+      <button type="submit" class="primary" id="editSave">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="settingsDialog">
+  <div class="dlg">
+    <h2>Settings</h2>
+    <h3>Google Drive</h3>
+    <p class="muted" id="driveStatus"></p>
+    <div class="dlg-actions wrap">
+      <button class="primary" id="signInBtn">Sign in with Google</button>
+      <button id="syncNowBtn">Sync now</button>
+      <button id="signOutBtn">Sign out</button>
+    </div>
+    <p class="small-label">Drive file ID (share with Merlin)</p>
+    <div class="row"><input id="fileIdField" type="text" placeholder="Not created yet"><button id="copyId">Copy</button></div>
+    <p class="muted small">Second phone? Paste the same file ID here, then sign in with an account that can open the file.</p>
+    <h3>Monthly budgets</h3>
+    <div id="budgetFields"></div>
+    <div class="dlg-actions">
+      <span class="spacer"></span>
+      <button id="settingsClose" class="primary">Done</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.__gsiLoaded&&window.__gsiLoaded()"></script>
+</body>
+</html>
